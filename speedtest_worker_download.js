@@ -186,7 +186,7 @@ function dlTest (done) {
     startT = new Date().getTime(), // timestamp when test was started
     graceTimeDone = false, //set to true after the grace time is past
     failed = false // set to true if a stream fails
-    var HistLoaded=[0,0,0,0,0,0,0,0,0,0]
+    var HistLoaded=[0,0]
     var LastLoaded=0.0
     var update_Idx=0
   xhr = []
