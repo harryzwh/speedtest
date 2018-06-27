@@ -186,6 +186,9 @@ function dlTest (done) {
     startT = new Date().getTime(), // timestamp when test was started
     graceTimeDone = false, //set to true after the grace time is past
     failed = false // set to true if a stream fails
+    var HistLoaded=[0,0,0,0,0,0,0,0,0,0]
+    var LastLoaded=0.0
+    var update_Idx=0
   xhr = []
   // function to create a download stream. streams are slightly delayed so that they will not end at the same time
   var testStream = function (i, delay) {
@@ -243,7 +246,14 @@ function dlTest (done) {
         graceTimeDone = true;
       }
     }else{
+      LastSum=0.0
+      for(var i = 0; i < HistLoaded.length; i++){
+      LastSum += HistLoaded[i];
+      }
+      var LastMean  = LastSum / HistLoaded.length;
       var speed = totLoaded / (t / 1000.0)
+      HistLoaded[update_Idx%10]=totLoaded-LastLoaded
+      LastLoaded=totLoaded
       dlStatus = ((speed * 8 * settings.overheadCompensationFactor)/(settings.useMebibits?1048576:1000000)).toFixed(2) // speed is multiplied by 8 to go from bytes to bits, overhead compensation is applied, then everything is divided by 1048576 or 1000000 to go to megabits/mebibits
       if (((t / 1000.0) > settings.time_dl && dlStatus > 0) || failed) { // test is over, stop streams and timer
         if (failed || isNaN(dlStatus)) dlStatus = 'Fail'
